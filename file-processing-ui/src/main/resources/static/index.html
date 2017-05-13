@@ -1,0 +1,58 @@
+<!doctype html>
+<html ng-app="MyApp">
+<head>
+<title>File Processing UI</title>
+<link href="lib/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+.btn-file {
+	position: relative;
+	overflow: hidden;
+}
+
+.btn-file input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity = 0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+</style>
+<body ng-controller="HomeController">
+	<div class="container" style="margin-top: 30px;">
+
+		<form name="myForm">
+			<label class="btn btn-default btn-file" ng-disabled="myForm.$valid">Browse
+				<input type="file" ngf-select ng-model="file" name="file"
+				ngf-max-size="500MB" required ngf-model-invalid="errorFile">
+			</label> <i ng-show="myForm.file.$error.required">*required</i><br> <i
+				ng-show="myForm.file.$error.maxSize">File too large
+				{{errorFile.size / 1000000|number:1}}MB: max 2M</i> <br>
+			<button class="btn btn-primary" ng-disabled="!myForm.$valid"
+				ng-click="uploadFile(file)">Submit</button>
+
+			<button class="btn btn-primary" ng-disabled="!myForm.$valid"
+				ng-click="clearFile()">Clear</button>
+			<span class="progress" ng-show="picFile.progress >= 0">
+				<div style="width: {{picFile.progress"
+					ng-bind="picFile.progress + '%'"></div>
+			</span> <span ng-show="picFile.result">Upload Successful</span> <span
+				class="err" ng-show="errorMsg">{{errorMsg}}</span> <br>
+		</form>
+
+
+	</div>
+	<script src="lib/angular.min.js"></script>
+	<script src="lib/ng-file-upload-shim.min.js"></script>
+	<script src="lib/ng-file-upload.min.js"></script>
+	<script src="app.js"></script>
+</body>
+</html>
