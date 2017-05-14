@@ -1,5 +1,9 @@
 package org.techforumist.domain;
 
+/**
+ * @author Sarath Muraleedharan
+ *
+ */
 public class StreamRecord {
 	private Long id;
 	private String data;

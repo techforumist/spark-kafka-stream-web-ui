@@ -1,4 +1,13 @@
+spring:
+  http:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+  jpa:
+    hibernate:
+      ddl-auto: create
 server:
   port: 8585
+  
 kafka:
   bootstrap-servers: localhost:9092

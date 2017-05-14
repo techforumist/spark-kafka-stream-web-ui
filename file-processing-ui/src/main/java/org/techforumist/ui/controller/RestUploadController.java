@@ -5,9 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.techforumist.ui.domain.File;
 import org.techforumist.ui.kafka.producer.Sender;
+import org.techforumist.ui.repository.FileRepository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * @author Sarath Muraleedharan
+ *
+ */
 @RestController
 public class RestUploadController {
+
+	@Autowired
+	FileRepository fileRepository;
 
 	private final Logger logger = LoggerFactory.getLogger(RestUploadController.class);
 	private static String UPLOADED_FOLDER = "D:/fileUploaded/";
@@ -51,15 +57,14 @@ public class RestUploadController {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		count++;
-
 		File file = new File();
-		file.setId(count);
 		file.setFilePath(UPLOADED_FOLDER + uploadfile.getOriginalFilename());
-
+		file.setStatus("Pending");
+		file.setUploadCompleteTime(new Date());
+		file = fileRepository.save(file);
 		try {
 			sender.send("file_upload_complete", mapper.writeValueAsString(file));
-		} catch (JsonProcessingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
